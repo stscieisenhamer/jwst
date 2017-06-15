@@ -267,12 +267,12 @@ def test_multislit_metadata():
         with ImageModel((64, 64)) as im:
             ms.slits.append(ms.slits.item())
             ms.slits[-1].data = im.data
-        im = ms.slits[0]
-        im.subarray.name = "FULL"
-        assert ms.slits[0].subarray.name == "FULL"
+        slit = ms.slits[0]
+        slit.source_id = 1
+        assert ms.slits[0].source_id == 1
 
 
-def test_multislit_metadata():
+def test_multislit_metadata_2():
     with MultiSlitModel() as ms:
         ms.slits.append(ms.slits.item())
         for key, val in ms.iteritems():
