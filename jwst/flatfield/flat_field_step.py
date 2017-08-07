@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from memory_profiler import profile
 
 from ..stpipe import Step, cmdline
 from .. import datamodels
@@ -31,6 +32,7 @@ class FlatFieldStep(Step):
 
     reference_file_types = ["flat", "fflat", "sflat", "dflat"]
 
+    @profile
     def process(self, input):
 
         if self.flat_suffix is not None:

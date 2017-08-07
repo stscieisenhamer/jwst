@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from collections import defaultdict
+from memory_profiler import profile
 
 from .. import datamodels
 from ..associations.load_as_asn import LoadAsLevel2Asn
@@ -59,6 +60,7 @@ class Spec2Pipeline(Pipeline):
     }
 
     # Main processing
+    @profile
     def process(self, input):
         """Entrypoint for this pipeline
 
@@ -95,6 +97,7 @@ class Spec2Pipeline(Pipeline):
         self.log.info('Ending calwebb_spec2')
 
     # Process each exposure
+    @profile
     def process_exposure_product(
             self,
             exp_product,
