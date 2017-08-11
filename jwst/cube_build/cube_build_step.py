@@ -6,6 +6,9 @@ import math
 import json
 import os
 import numpy as np
+
+from memory_profiler import profile
+
 from ..stpipe import Step, cmdline
 from fitsblender import blendheaders
 from .. import datamodels
@@ -44,6 +47,7 @@ class CubeBuildStep (Step):
        """
     reference_file_types = ['cubepar','resol']
 
+    @profile
     def process(self, input):
         self.log.info('Starting IFU Cube Building Step')
 
