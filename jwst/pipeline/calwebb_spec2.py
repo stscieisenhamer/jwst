@@ -99,12 +99,12 @@ class Spec2Pipeline(Pipeline):
 
         # We're done
         self.log.info('Ending calwebb_spec2')
-        self.log.debug(
+        self.log.warning(
             'Result references still alive. Total={}):'.format(len(weakrefs))
         )
         for idx, wr in enumerate(weakrefs):
             if wr() is not None:
-                self.log.debug('\nresult #{} is alive')
+                self.log.warning('\nresult #{} is alive')
 
     # Process each exposure
     @profile
