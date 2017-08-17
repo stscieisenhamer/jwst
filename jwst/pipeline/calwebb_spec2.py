@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from collections import defaultdict
 from memory_profiler import profile
+import weakref
 
 from .. import datamodels
 from ..associations.load_as_asn import LoadAsLevel2Asn
@@ -76,6 +77,7 @@ class Spec2Pipeline(Pipeline):
 
         # Each exposure is a product in the association.
         # Process each exposure.
+        weakrefs = []
         for product in asn['products']:
             self.log.info('Processing product {}'.format(product['name']))
             self.output_basename = product['name']
@@ -93,8 +95,16 @@ class Spec2Pipeline(Pipeline):
 
             self.closeout(to_close=[result])
 
+            weakrefs.append(weakref.ref(result))
+
         # We're done
         self.log.info('Ending calwebb_spec2')
+        self.log.debug(
+            'Result references still alive. Total={}):'.format(len(weakrefs))
+        )
+        for idx, wr in enumerate(weakrefs):
+            if wr() is not None:
+                self.log.debug('\nresult #{} is alive')
 
     # Process each exposure
     @profile

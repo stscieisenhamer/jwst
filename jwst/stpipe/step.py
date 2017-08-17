@@ -4,6 +4,7 @@ Step
 from __future__ import absolute_import, division, print_function
 
 import gc
+from memory_profiler import profile
 from os.path import dirname, join, basename, splitext, abspath, split
 import re
 import sys
@@ -820,6 +821,7 @@ class Step(object):
             output_path = join(output_dir, output_path)
         return output_path
 
+    @profile
     def closeout(self, to_close=None, to_del=None):
         """Close out step processing
 
