@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from collections import defaultdict
 from memory_profiler import profile
-import weakref
 
 from .. import datamodels
 from ..associations.load_as_asn import LoadAsLevel2Asn
@@ -77,7 +76,6 @@ class Spec2Pipeline(Pipeline):
 
         # Each exposure is a product in the association.
         # Process each exposure.
-        weakrefs = []
         for product in asn['products']:
             self.log.info('Processing product {}'.format(product['name']))
             self.output_basename = product['name']
@@ -87,26 +85,8 @@ class Spec2Pipeline(Pipeline):
                 asn.filename
             )
 
-            """
-            # Save result
-            suffix = 'cal'
-            if isinstance(result, datamodels.CubeModel):
-                suffix = 'calints'
-            self.save_model(result, suffix)
-
-            self.closeout(to_close=[result])
-
-            weakrefs.append(weakref.ref(result))
-            """
-
         # We're done
         self.log.info('Ending calwebb_spec2')
-        self.log.warning(
-            'Result references still alive. Total={}):'.format(len(weakrefs))
-        )
-        for idx, wr in enumerate(weakrefs):
-            if wr() is not None:
-                self.log.warning('\nresult #{} is alive')
 
     # Process each exposure
     @profile
@@ -219,10 +199,11 @@ class Spec2Pipeline(Pipeline):
         input.meta.asn.pool_name = pool_name
         input.meta.asn.table_name = asn_file
 
-        # Setup to save the calibrated exposure at end of step.
+        # Save the basic calibrated product
         self.suffix = 'cal'
         if isinstance(input, datamodels.CubeModel):
             self.suffix = 'calints'
+        self.save_model(input, self.suffix)
 
         # Produce a resampled product, either via resample_spec for
         # "regular" spectra or cube_build for IFU data. No resampled
