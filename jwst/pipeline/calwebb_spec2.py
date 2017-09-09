@@ -81,13 +81,12 @@ class Spec2Pipeline(Pipeline):
         for product in asn['products']:
             self.log.info('Processing product {}'.format(product['name']))
             self.output_basename = product['name']
-            #result = self.process_exposure_product(
-            self.process_exposure_product(
+            result = self.process_exposure_product(
                 product,
                 asn['asn_pool'],
                 asn.filename
             )
-            """
+
             # Save result
             suffix = 'cal'
             if isinstance(result, datamodels.CubeModel):
@@ -97,7 +96,6 @@ class Spec2Pipeline(Pipeline):
             self.closeout(to_close=[result])
 
             weakrefs.append(weakref.ref(result))
-            """
 
         # We're done
         self.log.info('Ending calwebb_spec2')
@@ -268,4 +266,4 @@ class Spec2Pipeline(Pipeline):
         self.log.info(
             'Finished processing product {}'.format(exp_product['name'])
         )
-        #return input
+        return input
