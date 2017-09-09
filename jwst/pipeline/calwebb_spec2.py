@@ -84,6 +84,7 @@ class Spec2Pipeline(Pipeline):
                 asn['asn_pool'],
                 asn.filename
             )
+            self.closeout()
 
         # We're done
         self.log.info('Ending calwebb_spec2')
