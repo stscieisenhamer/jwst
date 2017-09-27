@@ -36,6 +36,8 @@ def load_wcs(input_model, reference_files={}):
         return input_model
     else:
         output_model = input_model.copy()
+        log.warning('Made wcs pipeline but not saving it')
+        return output_model
         wcs = WCS(pipeline)
         output_model.meta.wcs = wcs
         output_model.meta.cal_step.assign_wcs = 'COMPLETE'
