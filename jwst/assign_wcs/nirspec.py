@@ -7,6 +7,7 @@ Call create_pipeline() which redirects based on EXP_TYPE
 from __future__ import (absolute_import, unicode_literals, division,
                         print_function)
 import logging
+from memory_profiler import profile
 import numpy as np
 
 from astropy.modeling import models, fitting
@@ -121,6 +122,7 @@ def imaging(input_model, reference_files):
     return imaging_pipeline
 
 
+@profile
 def ifu(input_model, reference_files):
     """
     IFU pipeline
