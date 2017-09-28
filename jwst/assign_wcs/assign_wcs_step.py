@@ -2,9 +2,11 @@
 from __future__ import (absolute_import, unicode_literals, division,
                         print_function)
 
+import logging
+from memory_profiler import profile
+
 from ..stpipe import Step, cmdline
 from .. import datamodels
-import logging
 from .assign_wcs import load_wcs
 
 log = logging.getLogger(__name__)
@@ -42,6 +44,7 @@ class AssignWcsStep(Step):
                             'disperser', 'fore', 'fpa', 'msa', 'ote', 'ifupost',
                             'ifufore', 'ifuslicer']
 
+    @profile
     def process(self, input):
         reference_file_names = {}
         with datamodels.open(input) as input_model:

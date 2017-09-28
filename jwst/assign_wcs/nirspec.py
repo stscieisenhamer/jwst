@@ -31,6 +31,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
+@profile
 def create_pipeline(input_model, reference_files):
     """
     Create a pipeline list based on EXP_TYPE.
