@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from collections import defaultdict
+from memory_profiler import profile
 
 from .. import datamodels
 from ..associations.load_as_asn import LoadAsLevel2Asn
@@ -36,6 +37,7 @@ class Image2Pipeline(Pipeline):
         'photom': photom_step.PhotomStep,
         }
 
+    @profile
     def process(self, input):
 
         self.log.info('Starting calwebb_image2 ...')
@@ -65,6 +67,7 @@ class Image2Pipeline(Pipeline):
         self.log.info('... ending calwebb_image2')
 
     # Process each exposure
+    @profile
     def process_exposure_product(
             self,
             exp_product,
