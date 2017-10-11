@@ -250,4 +250,4 @@ class Spec2Pipeline(Pipeline):
         self.log.info(
             'Finished processing product {}'.format(exp_product['name'])
         )
-        #return input
+        return input
