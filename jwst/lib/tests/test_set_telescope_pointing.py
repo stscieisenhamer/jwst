@@ -38,7 +38,9 @@ db_path = os.path.join(os.path.dirname(__file__), 'data', 'engdb_mock.csv')
 mock_db = Table.read(db_path)
 siaf_db = os.path.join(os.path.dirname(__file__), 'data', 'siaf.db')
 
-# Some expected falues
+# Some expected values.
+# This pointing was provided by NGAS through W.Kinzel via
+# spreadsheet `acs_tim_data_4_stsci_dms_jitter_file_mod_ra_dec_pa.xls`
 Q_EXPECTED = np.asarray(
     [-0.36915286, 0.33763282, 0.05758533, 0.86395264]
 )
@@ -49,6 +51,9 @@ J2FGS_MATRIX_EXPECTED = np.asarray(
 )
 FSMCORR_EXPECTED = np.zeros((2,))
 OBSTIME_EXPECTED = STARTTIME
+VINFO_RA_EXPECTED = 348.927867
+VINFO_DEC_EXPECTED = -38.749239
+VINFO_PA_EXPECTED = 50.176708
 
 
 def register_responses(mocker, response_db, starttime, endtime):
@@ -157,6 +162,27 @@ def data_file():
         file_path = os.path.join(path, 'fits.fits')
         model.save(file_path)
         yield file_path
+
+def test_spot_check_v1():
+    """Spot check on a specific quaternion
+    """
+    p = stp.Pointing()
+    p.q = Q_EXPECTED
+    p.j2fgs_matrix = J2FGS_MATRIX_EXPECTED
+    p.fsmcorr = FSMCORR_EXPECTED
+
+    # Not checking SIAF. Set to unity
+    siaf = stp.SIAF()
+    siaf.v2ref = 0.
+    siaf.v3ref = 0.
+    siaf.v3idlyang = 0.
+    siaf.vparity = 1.
+
+    wcsinfo, vinfo = stp.calc_wcs(p, siaf)
+
+    assert np.isclose(vinfo.ra, VINFO_RA_EXPECTED)
+    assert np.isclose(vinfo.dec, VINFO_DEC_EXPECTED)
+    assert np.isclose(vinfo.pa, VINFO_PA_EXPECTED)
 
 
 def test_get_pointing_fail():
