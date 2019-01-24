@@ -20,7 +20,7 @@ __all__ = [
 ]
 
 # Define location of default Artifactory API key, for Jenkins use only
-ARTIFACTORY_API_KEY_FILE = '/eng/ssb2/keys/svc_jenkins.key'
+ARTIFACTORY_API_KEY_FILE = '/eng/ssb2/keys/svc_rodata.key'
 
 
 @pytest.mark.usefixtures('_jail')
