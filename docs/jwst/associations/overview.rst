@@ -40,8 +40,10 @@ instrumental effects from the data. The resulting files contain flux
 and spatially calibrated data, called *Stage 2b* data. The information
 is still in individual exposures.
 
-*Note: Older documentation and code may refer to the stages as **levels**. The
- are synonymous.*
+.. note::
+
+   Older documentation and code may refer to the stages as **levels**. They
+   are synonymous.
 
 To be truly useful, the exposures need to be combined and, in the case
 of multi-object spectrometry, separated, into data that is
