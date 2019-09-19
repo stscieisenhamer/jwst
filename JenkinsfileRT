@@ -50,7 +50,7 @@ bc0.test_cmds = [
     "pytest --cov=./ -r sxf -n 30 --bigdata --slow \
     --basetemp=${pytest_basetemp}  --junit-xml=results.xml \
     --log-level=INFO \
-    jwst",
+    jwst/tests_nightly/general/nirspec/test_calwebb_spec2_nrs_msa.py",
     "codecov --token=${codecov_token}"
 ]
 bc0.test_configs = [data_config]
