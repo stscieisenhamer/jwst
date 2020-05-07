@@ -537,9 +537,13 @@ def from_fits(hdulist, schema, context, **kwargs):
     except Exception as exc:
         raise exc.__class__("ERROR loading embedded ASDF: " + str(exc)) from exc
 
-    known_keywords, known_datas = _load_from_schema(hdulist, schema,
-                                                    ff.tree, context)
-    _load_extra_fits(hdulist, known_keywords, known_datas, ff.tree)
+    if not ff.tree \
+       or context._strict_validation \
+       or not context._pass_invalid_values:
+        known_keywords, known_datas = _load_from_schema(hdulist, schema,
+                                                        ff.tree, context)
+        _load_extra_fits(hdulist, known_keywords, known_datas, ff.tree)
+
     _load_history(hdulist, ff.tree)
 
     return ff
@@ -552,10 +556,13 @@ def from_fits_asdf(hdulist,
     Wrap asdf call to extract optional argumentscommet
     """
     ignore_missing_extensions = kwargs.pop('ignore_missing_extensions')
+    validate_on_read = kwargs.pop('validate_on_read', True)
     return fits_embed.AsdfInFits.open(hdulist,
                                       ignore_version_mismatch=ignore_version_mismatch,
                                       ignore_unrecognized_tag=ignore_unrecognized_tag,
-                                      ignore_missing_extensions=ignore_missing_extensions)
+                                      ignore_missing_extensions=ignore_missing_extensions,
+                                      validate_on_read=validate_on_read
+    )
 
 
 def from_fits_hdu(hdu, schema):
