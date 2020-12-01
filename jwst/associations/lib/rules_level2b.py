@@ -24,7 +24,8 @@ __all__ = [
     'Asn_Lv2ImageSpecial',
     'Asn_Lv2ImageTSO',
     'Asn_Lv2MIRLRSFixedSlitNod',
-    'Asn_Lv2NRSFSS',
+    'Asn_Lv2NRSFSSASlits',
+    'Asn_Lv2NRSFSSBSlits',
     'Asn_Lv2NRSIFUNod',
     'Asn_Lv2NRSLAMPSpectral',
     'Asn_Lv2NRSMSA',
@@ -717,7 +718,7 @@ class Asn_Lv2NRSMSA(
 
 
 @RegistryMarker.rule
-class Asn_Lv2NRSFSS(
+class Asn_Lv2NRSFSSASlits(
         AsnMixin_Lv2Spectral,
         DMSLevel2bBase
 ):
@@ -729,6 +730,7 @@ class Asn_Lv2NRSFSS(
         - Association type: ``spec2``
         - Pipeline: ``calwebb_spec2``
         - Spectral-based NIRSpec fixed-slit single target science exposures
+        - Only the A-slits and only for valid detectors.
         - Single science exposure
         - Handle along-the-slit background nodding
 
@@ -740,12 +742,71 @@ class Asn_Lv2NRSFSS(
     def __init__(self, *args, **kwargs):
 
         # Setup constraints
-        self.constraints = Constraint(
+        self.constraints = Constraint([
+            DMSAttrConstraint(
+                name='slit',
+                sources=['fxd_slit'],
+                value='.+a.'
+            ),
             Constraint_NRSFSS(self),
-        )
+        ])
 
         # Now check and continue initialization.
-        super(Asn_Lv2NRSFSS, self).__init__(*args, **kwargs)
+        super(Asn_Lv2NRSFSSASlits, self).__init__(*args, **kwargs)
+
+    def finalize(self):
+        """Finalize assocation
+
+        For NRS Fixed-slit, finalization means creating new associations for
+        background nods.
+
+        Returns
+        -------
+        associations: [association[, ...]] or None
+            List of fully-qualified associations that this association
+            represents.
+            `None` if a complete association cannot be produced.
+
+        """
+        return self.make_nod_asns()
+
+
+@RegistryMarker.rule
+class Asn_Lv2NRSFSSBSlits(
+        AsnMixin_Lv2Spectral,
+        DMSLevel2bBase
+):
+    """Level2b NIRSpec Fixed-slit Association
+
+    Notes
+    -----
+    Characteristics:
+        - Association type: ``spec2``
+        - Pipeline: ``calwebb_spec2``
+        - Spectral-based NIRSpec fixed-slit single target science exposures
+        - Only the B-slits and only for valid detectors.
+        - Single science exposure
+        - Handle along-the-slit background nodding
+
+    Association includes both the background and science exposures of the nodding.
+    The identified science exposure is fixed by the nod, pattern, and exposure number
+    to prevent other science exposures being included.
+    """
+
+    def __init__(self, *args, **kwargs):
+
+        # Setup constraints
+        self.constraints = Constraint([
+            DMSAttrConstraint(
+                name='slit',
+                sources=['fxd_slit'],
+                value='.+b.'
+            ),
+            Constraint_NRSFSS(self),
+        ])
+
+        # Now check and continue initialization.
+        super(Asn_Lv2NRSFSSBSlits, self).__init__(*args, **kwargs)
 
     def finalize(self):
         """Finalize assocation
