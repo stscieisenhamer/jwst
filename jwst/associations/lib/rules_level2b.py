@@ -740,46 +740,9 @@ class Asn_Lv2NRSFSS(
     def __init__(self, *args, **kwargs):
 
         # Setup constraints
-        self.constraints = Constraint([
-            Constraint_Base(),
-            Constraint_Mode(),
-            DMSAttrConstraint(
-                name='exp_type',
-                sources=['exp_type'],
-                value='nrs_fixedslit'
-            ),
-            Constraint(
-                [
-                    SimpleConstraint(
-                        value='science',
-                        test=lambda value, item: self.get_exposure_type(item) != value,
-                        force_unique=False
-                    ),
-                    Constraint(
-                        [
-                            DMSAttrConstraint(
-                                name='expspcin',
-                                sources=['expspcin'],
-                            ),
-                            DMSAttrConstraint(
-                                name='nods',
-                                sources=['numdthpt'],
-                            ),
-                            DMSAttrConstraint(
-                                name='subpxpns',
-                                sources=['subpxpns'],
-                            ),
-                            SimpleConstraint(
-                                value='science',
-                                test=lambda value, item: self.get_exposure_type(item) == value,
-                                force_unique=False
-                            )
-                        ]
-                    ),
-                ],
-                reduce=Constraint.any
-            )
-        ])
+        self.constraints = Constraint(
+            Constraint_NRSFSS(self),
+        )
 
         # Now check and continue initialization.
         super(Asn_Lv2NRSFSS, self).__init__(*args, **kwargs)

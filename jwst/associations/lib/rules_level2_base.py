@@ -50,6 +50,7 @@ __all__ = [
     'Constraint_Image_Nonscience',
     'Constraint_Image_Science',
     'Constraint_Mode',
+    'Constraint_NRSFSS',
     'Constraint_Single_Science',
     'Constraint_Special',
     'Constraint_Spectral_Science',
@@ -818,6 +819,57 @@ class Constraint_Image_Nonscience(Constraint):
                 )
             ],
             reduce=Constraint.any
+        )
+
+
+class Constraint_NRSFSS(Constraint):
+    """Select NIRSpec Fixed-slit Science exposures
+
+    The exposures will include the primary science, plus any nodded
+    background exposures.
+    """
+    def __init__(self, association):
+        super(Constraint_NRSFSS, self).__init__(
+            [
+                Constraint_Base(),
+                Constraint_Mode(),
+                DMSAttrConstraint(
+                    name='exp_type',
+                    sources=['exp_type'],
+                    value='nrs_fixedslit'
+                ),
+                Constraint(
+                    [
+                        SimpleConstraint(
+                            value='science',
+                            test=lambda value, item: association.get_exposure_type(item) != value,
+                            force_unique=False
+                        ),
+                        Constraint(
+                            [
+                                DMSAttrConstraint(
+                                    name='expspcin',
+                                    sources=['expspcin'],
+                                ),
+                                DMSAttrConstraint(
+                                    name='nods',
+                                    sources=['numdthpt'],
+                                ),
+                                DMSAttrConstraint(
+                                    name='subpxpns',
+                                    sources=['subpxpns'],
+                                ),
+                                SimpleConstraint(
+                                    value='science',
+                                    test=lambda value, item: association.get_exposure_type(item) == value,
+                                    force_unique=False
+                                )
+                            ]
+                        ),
+                    ],
+                    reduce=Constraint.any
+                )
+            ]
         )
 
 
