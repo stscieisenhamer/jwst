@@ -657,6 +657,7 @@ class Asn_Lv2WFSS(
 
 @RegistryMarker.rule
 class Asn_Lv2NRSMSA(
+        AsnMixin_Lv2Nod,
         AsnMixin_Lv2Spectral,
         DMSLevel2bBase
 ):
@@ -697,28 +698,10 @@ class Asn_Lv2NRSMSA(
         # Now check and continue initialization.
         super(Asn_Lv2NRSMSA, self).__init__(*args, **kwargs)
 
-    def finalize(self):
-        """Finalize assocation
-
-        For NRS MSA, finalization means creating new associations for
-        background nods.
-
-        Returns
-        -------
-        associations: [association[, ...]] or None
-            List of fully-qualified associations that this association
-            represents.
-            `None` if a complete association cannot be produced.
-
-        """
-        if self.is_valid:
-            return self.make_nod_asns()
-        else:
-            return None
-
 
 @RegistryMarker.rule
 class Asn_Lv2NRSFSSASlits(
+        AsnMixin_Lv2Nod,
         AsnMixin_Lv2Spectral,
         DMSLevel2bBase
 ):
@@ -754,25 +737,10 @@ class Asn_Lv2NRSFSSASlits(
         # Now check and continue initialization.
         super(Asn_Lv2NRSFSSASlits, self).__init__(*args, **kwargs)
 
-    def finalize(self):
-        """Finalize assocation
-
-        For NRS Fixed-slit, finalization means creating new associations for
-        background nods.
-
-        Returns
-        -------
-        associations: [association[, ...]] or None
-            List of fully-qualified associations that this association
-            represents.
-            `None` if a complete association cannot be produced.
-
-        """
-        return self.make_nod_asns()
-
 
 @RegistryMarker.rule
 class Asn_Lv2NRSFSSBSlits(
+        AsnMixin_Lv2Nod,
         AsnMixin_Lv2Spectral,
         DMSLevel2bBase
 ):
@@ -808,25 +776,10 @@ class Asn_Lv2NRSFSSBSlits(
         # Now check and continue initialization.
         super(Asn_Lv2NRSFSSBSlits, self).__init__(*args, **kwargs)
 
-    def finalize(self):
-        """Finalize assocation
-
-        For NRS Fixed-slit, finalization means creating new associations for
-        background nods.
-
-        Returns
-        -------
-        associations: [association[, ...]] or None
-            List of fully-qualified associations that this association
-            represents.
-            `None` if a complete association cannot be produced.
-
-        """
-        return self.make_nod_asns()
-
 
 @RegistryMarker.rule
 class Asn_Lv2NRSIFUNod(
+        AsnMixin_Lv2Nod,
         AsnMixin_Lv2Spectral,
         DMSLevel2bBase
 ):
@@ -869,23 +822,6 @@ class Asn_Lv2NRSIFUNod(
 
         # Now check and continue initialization.
         super(Asn_Lv2NRSIFUNod, self).__init__(*args, **kwargs)
-
-    def finalize(self):
-        """Finalize assocation
-
-        Finalization means creating new associations for
-        background nods.
-
-        Returns
-        -------
-        associations: [association[, ...]] or None
-            List of fully-qualified associations that this association
-            represents.
-            `None` if a complete association cannot be produced.
-
-        """
-        nodded_asns = self.make_nod_asns()
-        return nodded_asns
 
 
 @RegistryMarker.rule
