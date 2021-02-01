@@ -82,6 +82,7 @@ def open(init=None, memmap=False, **kwargs):
     shape = ()
     file_name = None
     file_to_close = None
+    using_resources = False
 
     # Get special cases for opening a model out of the way
     # all special cases return a model if they match
@@ -109,6 +110,7 @@ def open(init=None, memmap=False, **kwargs):
             else:
                 hdulist = fits.open(init, memmap=memmap)
             file_to_close = hdulist
+            using_resources = True
 
         elif file_type == "asn":
             # Read the file as an association / model container
@@ -120,6 +122,7 @@ def open(init=None, memmap=False, **kwargs):
                 asdffile = asdf.open(s3_utils.get_object(init), **kwargs)
             else:
                 asdffile = asdf.open(init, **kwargs)
+                using_resources = True
 
             # Detect model type, then get defined model, and call it.
             new_class = _class_from_model_type(asdffile)
@@ -195,6 +198,10 @@ def open(init=None, memmap=False, **kwargs):
     # Close the hdulist if we opened it
     if file_to_close is not None:
         model._files_to_close.append(file_to_close)
+
+
+    # If external resources are being used, add the model to the resource list.
+    if using_resources:
         model._models_using_resources.append(model)
 
     if not has_model_type:
