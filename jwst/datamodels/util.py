@@ -195,6 +195,7 @@ def open(init=None, memmap=False, **kwargs):
     # Close the hdulist if we opened it
     if file_to_close is not None:
         model._files_to_close.append(file_to_close)
+        model._models_using_resources.append(model)
 
     if not has_model_type:
         class_name = new_class.__name__.split('.')[-1]

@@ -259,7 +259,7 @@ def container():
                 m.meta.observation.exposure_number = '1'
                 m.meta.instrument.name = 'NIRCAM'
                 m.meta.instrument.channel = 'SHORT'
-        yield c
+            yield c
 
 
 def reset_group_id(container):
