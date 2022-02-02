@@ -1046,6 +1046,12 @@ def calc_transforms_coarse_tr_202107(t_pars: TransformParameters):
     logger.info('Calculating transforms using TR 202107 COARSE Tracking method...')
     t_pars.method = Methods.COARSE_TR_202107
 
+    # FGS detector is not relevant in COARSE mode. Default to using 1.
+    logger.info('FGS ID is defaulted to 1')
+    pointing_new = {field: getattr(t_pars.pointing, field) for field in t_pars.pointing._fields}
+    pointing_new['fgsid'] = 1
+    t_pars.pointing = Pointing(**pointing_new)
+
     # Determine the M_eci_to_gs matrix. Since this is a full train, the matrix
     # is returned as part of the full Transforms object. Many of the required
     # matrices are already determined as part of this calculation.
