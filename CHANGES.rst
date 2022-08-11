@@ -55,6 +55,11 @@ resample
   resampled error map contained an excessive number of zero-valued
   pixel. [#6954]
 
+set_telescope_pointing
+----------------------
+
+-  Update WCS calculations for the GUIDING modes [#6975]
+
 skymatch
 --------
 
