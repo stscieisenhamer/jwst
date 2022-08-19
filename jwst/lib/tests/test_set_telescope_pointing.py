@@ -88,6 +88,19 @@ METAS_ISCLOSE = ['meta.wcsinfo.cdelt1',
                  ]
 
 
+@pytest.mark.parametrize('par, value, expected', [
+    ('method', stp.Methods.TRACK_TR_202111, stp.Methods.TRACK_TR_202111),
+    ('reduce_func', stp.first_pointing, stp.first_pointing),
+])
+def test_tpars_override(par, value, expected, data_file):
+    """Test overriding various TransformParameters in t_pars_from_model"""
+    kwargs = {par: value}
+    with datamodels.open(data_file) as model:
+        t_pars = stp.t_pars_from_model(model, **kwargs)
+
+    assert getattr(t_pars, par) == expected
+
+
 @pytest.fixture(params=[('good_model', True), ('bad_model', False), ('fits_nomodel', False)])
 def file_case(request, tmp_path):
     """Generate files with different model states"""
@@ -676,18 +689,19 @@ def calc_transforms(request, tmp_path_factory):
 @pytest.fixture
 def data_file(tmp_path):
     model = datamodels.Level1bModel()
-    model.meta.exposure.start_time = STARTTIME.mjd
-    model.meta.exposure.end_time = ENDTIME.mjd
-    model.meta.target.ra = TARG_RA
-    model.meta.target.dec = TARG_DEC
-    model.meta.guidestar.gs_ra = TARG_RA + 0.0001
-    model.meta.guidestar.gs_dec = TARG_DEC + 0.0001
     model.meta.aperture.name = "MIRIM_FULL"
-    model.meta.observation.date = '2017-01-01'
-    model.meta.exposure.type = "MIR_IMAGE"
     model.meta.ephemeris.velocity_x = -25.021
     model.meta.ephemeris.velocity_y = -16.507
     model.meta.ephemeris.velocity_z = -7.187
+    model.meta.exposure.end_time = ENDTIME.mjd
+    model.meta.exposure.start_time = STARTTIME.mjd
+    model.meta.exposure.type = "MIR_IMAGE"
+    model.meta.guidestar.gs_ra = TARG_RA + 0.0001
+    model.meta.guidestar.gs_dec = TARG_DEC + 0.0001
+    model.meta.guidestar.gs_pcs_mode = 'COARSE'
+    model.meta.observation.date = '2017-01-01'
+    model.meta.target.ra = TARG_RA
+    model.meta.target.dec = TARG_DEC
 
     file_path = tmp_path / 'file.fits'
     model.save(file_path)
