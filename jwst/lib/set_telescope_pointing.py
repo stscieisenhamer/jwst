@@ -2631,7 +2631,8 @@ def t_pars_from_model(model, **t_pars_kwargs):
     logger.debug('JWST Velocity: %s', t_pars.jwst_velocity)
 
     # Set the transform and WCS calculation method.
-    t_pars.method = method_from_pcs_mode(t_pars.pcs_mode)
+    if not t_pars.method:
+        t_pars.method = method_from_pcs_mode(t_pars.pcs_mode)
 
     # Set pointing reduction function if not already set.
     if not t_pars.reduce_func:
