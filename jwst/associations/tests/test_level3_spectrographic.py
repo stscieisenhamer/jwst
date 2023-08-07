@@ -48,7 +48,6 @@ def nirspec_params_id(fixture_value):
     cid, asn_type, asn_name, product_name, exptypes = fixture_value
     return asn_name
 
-
 @pytest.fixture(
     scope='module',
     params=[
@@ -56,7 +55,7 @@ def nirspec_params_id(fixture_value):
             'o001',
             'spec3',
             r'jw99009-o001_spec3_\d{5}_asn',
-            'jw99009-o001_{source_id}_nirspec_f100lp-g140m-s200a2-s200a2',
+            'jw99009-o001_{source_id}_nirspec_f100lp-g140m-s200a2',
             set(('science', 'target_acquisition', 'autowave'))
         ),
         (

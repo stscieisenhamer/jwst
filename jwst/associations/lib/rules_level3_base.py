@@ -756,10 +756,22 @@ class Constraint_Optical_Path(Constraint):
                 sources=['pupil', 'grating'],
                 required=False,
             ),
-            DMSAttrConstraint(
-                name='opt_elem3',
-                sources=['fxd_slit'],
-                required=False,
+            Constraint(
+                [
+                    DMSAttrConstraint(
+                        name='opt_elem3',
+                        sources='fxd_slit',
+                        value='S200A1|S200A2',
+                        force_unique=False,
+                        required=False,
+                    ),
+                    DMSAttrConstraint(
+                        name='opt_elem3',
+                        sources='fxd_slit',
+                        required=False,
+                    )
+                ],
+                reduce=Constraint.any
             ),
             DMSAttrConstraint(
                 name='subarray',

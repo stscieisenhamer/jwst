@@ -1,6 +1,14 @@
 1.11.4 (unreleased)
 ===================
 
+associations
+------------
+
+- Changes the way associations are create for field  ``FXD_SLIT``.  Assocations
+  for this field will now include values for both ``S200A1`` and ``S200A2``,
+  instead of separating them. [#7795]
+
+
 calwebb_spec2
 -------------
 
