@@ -757,20 +757,25 @@ class Constraint_Optical_Path(Constraint):
                 required=False,
             ),
             DMSAttrConstraint(
-                name='opt_elem3',
-                sources=['fxd_slit'],
-                required=False,
-            ),
-            DMSAttrConstraint(
-                name='opt_elem4',
-                sources='fxd_slit',
-                value=['S200A1|S200A2'],
-                force_unique=False,
-                required=False,
-            ),
-            DMSAttrConstraint(
                 name='subarray',
-                sources=['subarray']
+                sources=['subarray'],
+            ),
+            Constraint(
+                [
+                    DMSAttrConstraint(
+                        name='opt_elem3',
+                        sources=['fxd_slit'],
+                        value=['s200a1|s200a2'],
+                        force_unique=False,
+                        required=False,
+                    ),
+                    DMSAttrConstraint(
+                        name='opt_elem4',
+                        sources=['fxd_slit'],
+                        required=False,
+                    ),
+                ],
+                reduce=Constraint.any
             )
         ])
 
